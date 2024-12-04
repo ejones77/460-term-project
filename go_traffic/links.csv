@@ -1,0 +1,253 @@
+Link_ID,From_Node_Name,To_Node_Name,From_Node_ID,To_Node_ID
+1,N Wacker / Jackson,N Wacker / Adams,7,6
+2,N Wacker / Adams,N Wacker / Monroe,6,5
+3,N Wacker / Monroe,N Wacker / Madison,5,4
+4,N Wacker / Madison,N Wacker / Washington,4,3
+5,N Wacker / Washington,N Wacker / Randolph,3,2
+6,N Wacker / Randolph,N Wacker / Lake,2,1
+7,N Wacker / Lake,Franklin / W Wacker,1,8
+8,Franklin / Jackson,Franklin / Adams,15,14
+9,Franklin / Adams,Franklin / Monroe,14,13
+10,Franklin / Monroe,Franklin / Madison,13,12
+11,Franklin / Madison,Franklin / Washington,12,11
+12,Franklin / Washington,Franklin / Randolph,11,10
+13,Franklin / Randolph,Franklin / Lake,10,9
+14,Franklin / Lake,Franklin / W Wacker,9,8
+15,Wells / W Wacker,Wells / Lake,16,17
+16,Wells / Lake,Wells / Randolph,17,18
+17,Wells / Randolph,Wells / Washington,18,19
+18,Wells / Washington,Wells / Madison,19,20
+19,Wells / Madison,Wells / Monroe,20,21
+20,Wells / Monroe,Wells / Adams,21,22
+21,Wells / Adams,Wells / Jackson,22,23
+22,Lasalle / W Wacker,Lasalle / Lake,24,25
+23,Lasalle / Lake,Lasalle / Randolph,25,26
+24,Lasalle / Randolph,Lasalle / Washington,26,27
+25,Lasalle / Washington,Lasalle / Madison,27,28
+26,Lasalle / Madison,Lasalle / Monroe,28,29
+27,Lasalle / Monroe,Lasalle / Adams,29,30
+28,Lasalle / Adams,Lasalle / Jackson,30,31
+29,Clark / W Wacker,Clark / Lake,32,33
+30,Clark / Lake,Clark / Randolph,33,34
+31,Clark / Randolph,Clark / Washington,34,35
+32,Clark / Washington,Clark / Madison,35,36
+33,Clark / Madison,Clark / Monroe,36,37
+34,Clark / Monroe,Clark / Adams,37,38
+35,Clark / Adams,Clark / Jackson,38,39
+36,Dearborn / W Wacker,Dearborn / Lake,40,41
+37,Dearborn / Lake,Dearborn / Randolph,41,42
+38,Dearborn / Randolph,Dearborn / Washington,42,43
+39,Dearborn / Washington,Dearborn / Madison,43,44
+40,Dearborn / Madison,Dearborn / Monroe,44,45
+41,Dearborn / Monroe,Dearborn / Adams,45,46
+42,Dearborn / Adams,Dearborn / Jackson,46,47
+43,State / W Wacker,State / Lake,48,49
+44,State / Lake,State / Randolph,49,50
+45,State / Randolph,State / Washington,50,51
+46,State / Washington,State / Madison,51,52
+47,State / Madison,State / Monroe,52,53
+48,State / Monroe,State / Adams,53,54
+49,State / Adams,State / Jackson,54,55
+50,Wabash / W Wacker,Wabash / Lake,56,57
+51,Wabash / Lake,Wabash / Randolph,57,58
+52,Wabash / Randolph,Wabash / Washington,58,59
+53,Wabash / Washington,Wabash / Madison,59,60
+54,Wabash / Madison,Wabash / Monroe,60,61
+55,Wabash / Monroe,Wabash / Adams,61,62
+56,Wabash / Adams,Wabash / Jackson,62,63
+57,Michigan / W Wacker,Michigan / Lake,64,65
+58,Michigan / Lake,Michigan / Randolph,65,66
+59,Michigan / Randolph,Michigan / Washington,66,67
+60,Michigan / Washington,Michigan / Madison,67,68
+61,Michigan / Madison,Michigan / Monroe,68,69
+62,Michigan / Monroe,Michigan / Adams,69,70
+63,Michigan / Adams,Michigan / Jackson,70,71
+64,Franklin / W Wacker,Wells / W Wacker,8,16
+65,Wells / W Wacker,Lasalle / W Wacker,16,24
+66,Lasalle / W Wacker,Clark / W Wacker,24,32
+67,Clark / W Wacker,Dearborn / W Wacker,32,40
+68,Dearborn / W Wacker,State / W Wacker,40,48
+69,State / W Wacker,Wabash / W Wacker,48,56
+70,Wabash / W Wacker,Michigan / W Wacker,56,64
+71,Franklin / Lake,Wells / Lake,9,17
+72,Wells / Lake,Lasalle / Lake,17,25
+73,Lasalle / Lake,Clark / Lake,25,33
+74,Clark / Lake,Dearborn / Lake,33,41
+75,Dearborn / Lake,State / Lake,41,49
+76,State / Lake,Wabash / Lake,49,57
+77,Wabash / Lake,Michigan / Lake,57,65
+78,Franklin / Randolph,Wells / Randolph,10,18
+79,Wells / Randolph,Lasalle / Randolph,18,26
+80,Lasalle / Randolph,Clark / Randolph,26,34
+81,Clark / Randolph,Dearborn / Randolph,34,42
+82,Dearborn / Randolph,State / Randolph,42,50
+83,State / Randolph,Wabash / Randolph,50,58
+84,Wabash / Randolph,Michigan / Randolph,58,66
+85,Franklin / Washington,Wells / Washington,11,19
+86,Wells / Washington,Lasalle / Washington,19,27
+87,Lasalle / Washington,Clark / Washington,27,35
+88,Clark / Washington,Dearborn / Washington,35,43
+89,Dearborn / Washington,State / Washington,43,51
+90,State / Washington,Wabash / Washington,51,59
+91,Wabash / Washington,Michigan / Washington,59,67
+92,Franklin / Madison,Wells / Madison,12,20
+93,Wells / Madison,Lasalle / Madison,20,28
+94,Lasalle / Madison,Clark / Madison,28,36
+95,Clark / Madison,Dearborn / Madison,36,44
+96,Dearborn / Madison,State / Madison,44,52
+97,State / Madison,Wabash / Madison,52,60
+98,Wabash / Madison,Michigan / Madison,60,68
+99,Franklin / Monroe,Wells / Monroe,13,21
+100,Wells / Monroe,Lasalle / Monroe,21,29
+101,Lasalle / Monroe,Clark / Monroe,29,37
+102,Clark / Monroe,Dearborn / Monroe,37,45
+103,Dearborn / Monroe,State / Monroe,45,53
+104,State / Monroe,Wabash / Monroe,53,61
+105,Wabash / Monroe,Michigan / Monroe,61,69
+106,Franklin / Adams,Wells / Adams,14,22
+107,Wells / Adams,Lasalle / Adams,22,30
+108,Lasalle / Adams,Clark / Adams,30,38
+109,Clark / Adams,Dearborn / Adams,38,46
+110,Dearborn / Adams,State / Adams,46,54
+111,State / Adams,Wabash / Adams,54,62
+112,Wabash / Adams,Michigan / Adams,62,70
+113,Franklin / Jackson,Wells / Jackson,15,23
+114,Wells / Jackson,Lasalle / Jackson,23,31
+115,Lasalle / Jackson,Clark / Jackson,31,39
+116,Clark / Jackson,Dearborn / Jackson,39,47
+117,Dearborn / Jackson,State / Jackson,47,55
+118,State / Jackson,Wabash / Jackson,55,63
+119,Wabash / Jackson,Michigan / Jackson,63,71
+120,N Wacker / Adams,N Wacker / Jackson,6,7
+121,N Wacker / Monroe,N Wacker / Adams,5,6
+122,N Wacker / Madison,N Wacker / Monroe,4,5
+123,N Wacker / Washington,N Wacker / Madison,3,4
+124,N Wacker / Randolph,N Wacker / Washington,2,3
+125,N Wacker / Lake,N Wacker / Randolph,1,2
+126,Franklin / W Wacker,N Wacker / Lake,8,1
+127,Franklin / Adams,Franklin / Jackson,14,15
+128,Franklin / Monroe,Franklin / Adams,13,14
+129,Franklin / Madison,Franklin / Monroe,12,13
+130,Franklin / Washington,Franklin / Madison,11,12
+131,Franklin / Randolph,Franklin / Washington,10,11
+132,Franklin / Lake,Franklin / Randolph,9,10
+133,Franklin / W Wacker,Franklin / Lake,8,9
+134,Wells / Lake,Wells / W Wacker,17,16
+135,Wells / Randolph,Wells / Lake,18,17
+136,Wells / Washington,Wells / Randolph,19,18
+137,Wells / Madison,Wells / Washington,20,19
+138,Wells / Monroe,Wells / Madison,21,20
+139,Wells / Adams,Wells / Monroe,22,21
+140,Wells / Jackson,Wells / Adams,23,22
+141,Lasalle / Lake,Lasalle / W Wacker,25,24
+142,Lasalle / Randolph,Lasalle / Lake,26,25
+143,Lasalle / Washington,Lasalle / Randolph,27,26
+144,Lasalle / Madison,Lasalle / Washington,28,27
+145,Lasalle / Monroe,Lasalle / Madison,29,28
+146,Lasalle / Adams,Lasalle / Monroe,30,29
+147,Lasalle / Jackson,Lasalle / Adams,31,30
+148,Clark / Lake,Clark / W Wacker,33,32
+149,Clark / Randolph,Clark / Lake,34,33
+150,Clark / Washington,Clark / Randolph,35,34
+151,Clark / Madison,Clark / Washington,36,35
+152,Clark / Monroe,Clark / Madison,37,36
+153,Clark / Adams,Clark / Monroe,38,37
+154,Clark / Jackson,Clark / Adams,39,38
+155,Dearborn / Lake,Dearborn / W Wacker,41,40
+156,Dearborn / Randolph,Dearborn / Lake,42,41
+157,Dearborn / Washington,Dearborn / Randolph,43,42
+158,Dearborn / Madison,Dearborn / Washington,44,43
+159,Dearborn / Monroe,Dearborn / Madison,45,44
+160,Dearborn / Adams,Dearborn / Monroe,46,45
+161,Dearborn / Jackson,Dearborn / Adams,47,46
+162,State / Lake,State / W Wacker,49,48
+163,State / Randolph,State / Lake,50,49
+164,State / Washington,State / Randolph,51,50
+165,State / Madison,State / Washington,52,51
+166,State / Monroe,State / Madison,53,52
+167,State / Adams,State / Monroe,54,53
+168,State / Jackson,State / Adams,55,54
+169,Wabash / Lake,Wabash / W Wacker,57,56
+170,Wabash / Randolph,Wabash / Lake,58,57
+171,Wabash / Washington,Wabash / Randolph,59,58
+172,Wabash / Madison,Wabash / Washington,60,59
+173,Wabash / Monroe,Wabash / Madison,61,60
+174,Wabash / Adams,Wabash / Monroe,62,61
+175,Wabash / Jackson,Wabash / Adams,63,62
+176,Michigan / Lake,Michigan / W Wacker,65,64
+177,Michigan / Randolph,Michigan / Lake,66,65
+178,Michigan / Washington,Michigan / Randolph,67,66
+179,Michigan / Madison,Michigan / Washington,68,67
+180,Michigan / Monroe,Michigan / Madison,69,68
+181,Michigan / Adams,Michigan / Monroe,70,69
+182,Michigan / Jackson,Michigan / Adams,71,70
+183,Wells / W Wacker,Franklin / W Wacker,16,8
+184,Lasalle / W Wacker,Wells / W Wacker,24,16
+185,Clark / W Wacker,Lasalle / W Wacker,32,24
+186,Dearborn / W Wacker,Clark / W Wacker,40,32
+187,State / W Wacker,Dearborn / W Wacker,48,40
+188,Wabash / W Wacker,State / W Wacker,56,48
+189,Michigan / W Wacker,Wabash / W Wacker,64,56
+190,Wells / Lake,Franklin / Lake,17,9
+191,Lasalle / Lake,Wells / Lake,25,17
+192,Clark / Lake,Lasalle / Lake,33,25
+193,Dearborn / Lake,Clark / Lake,41,33
+194,State / Lake,Dearborn / Lake,49,41
+195,Wabash / Lake,State / Lake,57,49
+196,Michigan / Lake,Wabash / Lake,65,57
+197,Wells / Randolph,Franklin / Randolph,18,10
+198,Lasalle / Randolph,Wells / Randolph,26,18
+199,Clark / Randolph,Lasalle / Randolph,34,26
+200,Dearborn / Randolph,Clark / Randolph,42,34
+201,State / Randolph,Dearborn / Randolph,50,42
+202,Wabash / Randolph,State / Randolph,58,50
+203,Michigan / Randolph,Wabash / Randolph,66,58
+204,Wells / Washington,Franklin / Washington,19,11
+205,Lasalle / Washington,Wells / Washington,27,19
+206,Clark / Washington,Lasalle / Washington,35,27
+207,Dearborn / Washington,Clark / Washington,43,35
+208,State / Washington,Dearborn / Washington,51,43
+209,Wabash / Washington,State / Washington,59,51
+210,Michigan / Washington,Wabash / Washington,67,59
+211,Wells / Madison,Franklin / Madison,20,12
+212,Lasalle / Madison,Wells / Madison,28,20
+213,Clark / Madison,Lasalle / Madison,36,28
+214,Dearborn / Madison,Clark / Madison,44,36
+215,State / Madison,Dearborn / Madison,52,44
+216,Wabash / Madison,State / Madison,60,52
+217,Michigan / Madison,Wabash / Madison,68,60
+218,Wells / Monroe,Franklin / Monroe,21,13
+219,Lasalle / Monroe,Wells / Monroe,29,21
+220,Clark / Monroe,Lasalle / Monroe,37,29
+221,Dearborn / Monroe,Clark / Monroe,45,37
+222,State / Monroe,Dearborn / Monroe,53,45
+223,Wabash / Monroe,State / Monroe,61,53
+224,Michigan / Monroe,Wabash / Monroe,69,61
+225,Wells / Adams,Franklin / Adams,22,14
+226,Lasalle / Adams,Wells / Adams,30,22
+227,Clark / Adams,Lasalle / Adams,38,30
+228,Dearborn / Adams,Clark / Adams,46,38
+229,State / Adams,Dearborn / Adams,54,46
+230,Wabash / Adams,State / Adams,62,54
+231,Michigan / Adams,Wabash / Adams,70,62
+232,Wells / Jackson,Franklin / Jackson,23,15
+233,Lasalle / Jackson,Wells / Jackson,31,23
+234,Clark / Jackson,Lasalle / Jackson,39,31
+235,Dearborn / Jackson,Clark / Jackson,47,39
+236,State / Jackson,Dearborn / Jackson,55,47
+237,Wabash / Jackson,State / Jackson,63,55
+238,Michigan / Jackson,Wabash / Jackson,71,63
+238,N Wacker / Jackson,Franklin / Jackson,7,15
+238,N Wacker / Adams,Franklin / Adams,6,14
+238,N Wacker / Monroe,Franklin / Monroe,5,13
+238,N Wacker / Madison,Franklin / Madison,4,12
+238,N Wacker / Washington,Franklin / Washington,3,11
+238,N Wacker / Randolph,Franklin / Randolph,2,10
+238,N Wacker / Lake,Franklin / Lake,1,9
+238,Franklin / Jackson,N Wacker / Jackson,15,7
+238,Franklin / Adams,N Wacker / Adams,14,6
+238,Franklin / Monroe,N Wacker / Monroe,13,5
+238,Franklin / Madison,N Wacker / Madison,12,4
+238,Franklin / Washington,N Wacker / Washington,11,3
+238,Franklin / Randolph,N Wacker / Randolph,10,2
+238,Franklin / Lake,N Wacker / Lake,9,1
