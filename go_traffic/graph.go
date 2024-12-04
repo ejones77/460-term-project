@@ -2,11 +2,20 @@ package main
 
 import "fmt"
 
+type TrafficSignal struct {
+	State       string
+	Duration    int
+	ElapsedTime int
+}
+
 type Intersection struct {
-	ID   string
-	Name string
-	X    int
-	Y    int
+	ID       string
+	Name     string
+	X        int
+	Y        int
+	Signal   *TrafficSignal
+	Capacity int
+	Queue    []*Vehicle
 }
 
 type Road struct {
@@ -24,6 +33,7 @@ type Vehicle struct {
 	Path     []*Intersection
 	Position int
 	Status   string
+	Progress float64
 }
 
 type Graph struct {
