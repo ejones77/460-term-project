@@ -3,11 +3,14 @@ package main
 import (
 	"fmt"
 	"log"
+	"math/rand"
 
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
 func main() {
+	rand.New(rand.NewSource(0))
+
 	nodes, err := readNodes("nodes.csv")
 	if err != nil {
 		fmt.Println("Error reading nodes:", err)
@@ -25,6 +28,18 @@ func main() {
 		Links: links,
 	}
 
+	// Initialize traffic signals for specific intersections
+	for _, node := range graph.Nodes {
+		initialStates := []string{"red", "green", "yellow"}
+		initialState := initialStates[rand.Intn(len(initialStates))]
+		initialDuration := rand.Intn(20) + 10
+
+		node.Signal = &TrafficSignal{
+			State:    initialState,
+			Duration: initialDuration,
+		}
+	}
+
 	// Associate links with nodes
 	for _, link := range graph.Links {
 		fromNode, ok := graph.Nodes[link.FromNodeID]
@@ -39,26 +54,32 @@ func main() {
 		link.ToNode = toNode
 	}
 
-	// Example vehicles
+	// Create multiple vehicles
+	numVehicles := 1000
 	vehicles := []*Vehicle{}
 
-	path1, err := findPath(graph, "7", "71")
-	if err != nil {
-		log.Fatalf("Error finding path for Vehicle 1: %v", err)
-	}
-	vehicles = append(vehicles, &Vehicle{
-		ID:   "V1",
-		Path: path1,
-	})
+	for i := 0; i < numVehicles; i++ {
+		startNodeID := randomNodeID(graph.Nodes)
+		endNodeID := randomNodeID(graph.Nodes)
 
-	path2, err := findPath(graph, "9", "52")
-	if err != nil {
-		log.Fatalf("Error finding path for Vehicle 2: %v", err)
+		// Ensure start and end nodes are different
+		for startNodeID == endNodeID {
+			endNodeID = randomNodeID(graph.Nodes)
+		}
+
+		path, err := findPath(graph, startNodeID, endNodeID)
+		if err != nil {
+			log.Printf("Error finding path for Vehicle %d: %v", i, err)
+			continue
+		}
+
+		vehicles = append(vehicles, &Vehicle{
+			ID:       fmt.Sprintf("V%d", i+1),
+			Path:     path,
+			Position: 0,
+			Status:   "waiting",
+		})
 	}
-	vehicles = append(vehicles, &Vehicle{
-		ID:   "V2",
-		Path: path2,
-	})
 
 	// game loop
 	game := &Game{

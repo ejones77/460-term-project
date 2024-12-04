@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"fmt"
 	"io"
+	"math/rand"
 	"os"
 	"strings"
 )
@@ -112,4 +113,12 @@ func readEdges(filename string) ([]*Road, error) {
 		edges = append(edges, edge)
 	}
 	return edges, nil
+}
+
+func randomNodeID(nodes map[string]*Intersection) string {
+	keys := make([]string, 0, len(nodes))
+	for k := range nodes {
+		keys = append(keys, k)
+	}
+	return keys[rand.Intn(len(keys))]
 }
