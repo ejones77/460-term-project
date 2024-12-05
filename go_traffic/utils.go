@@ -82,7 +82,7 @@ func readNodes(filename string) (map[string]*Intersection, error) {
 	return nodes, nil
 }
 
-func readEdges(filename string) ([]*Road, error) {
+func readLinks(filename string) ([]*Road, error) {
 	file, err := os.Open(filename)
 	if err != nil {
 		return nil, err
@@ -96,23 +96,24 @@ func readEdges(filename string) ([]*Road, error) {
 		return nil, err
 	}
 
-	var edges []*Road
+	var links []*Road
 
 	records, err := reader.ReadAll()
 	if err != nil {
 		return nil, err
 	}
 	for _, record := range records {
-		edge := &Road{
-			ID:           record[0],
-			FromNodeName: record[1],
-			ToNodeName:   record[2],
-			FromNodeID:   record[3],
-			ToNodeID:     record[4],
+		link := &Road{
+			ID:             record[0],
+			FromNodeName:   record[1],
+			ToNodeName:     record[2],
+			FromNodeID:     record[3],
+			ToNodeID:       record[4],
+			VehiclesOnRoad: []*Vehicle{},
 		}
-		edges = append(edges, edge)
+		links = append(links, link)
 	}
-	return edges, nil
+	return links, nil
 }
 
 func randomNodeID(nodes map[string]*Intersection) string {
@@ -121,4 +122,66 @@ func randomNodeID(nodes map[string]*Intersection) string {
 		keys = append(keys, k)
 	}
 	return keys[rand.Intn(len(keys))]
+}
+
+func checkForAccidents(graph *Graph, vehicles []*Vehicle) {
+	for _, link := range graph.Links {
+		link.VehiclesOnRoad = nil
+	}
+
+	for _, vehicle := range vehicles {
+		if vehicle.Status != "arrived" && vehicle.Position < len(vehicle.Path)-1 {
+			currentNode := vehicle.Path[vehicle.Position]
+			nextNode := vehicle.Path[vehicle.Position+1]
+
+			for _, link := range graph.Links {
+				if link.FromNode == currentNode && link.ToNode == nextNode {
+					link.VehiclesOnRoad = append(link.VehiclesOnRoad, vehicle)
+					break
+				}
+			}
+		}
+	}
+
+	for _, link := range graph.Links {
+		if link.Accident == nil {
+			if len(link.VehiclesOnRoad) >= 2 {
+				if rand.Float64() < ACCIDENT_PROBABILITY {
+					accidentPosition := rand.Float64()
+					accidentDuration := rand.Intn(300) + 300
+					link.Accident = &Accident{Road: link, Position: accidentPosition, Duration: accidentDuration}
+				}
+			}
+		}
+	}
+}
+
+func updateAccidents(graph *Graph) {
+	for _, link := range graph.Links {
+		if link.Accident != nil {
+			link.Accident.ElapsedTime++
+			if link.Accident.ElapsedTime >= link.Accident.Duration {
+				link.Accident = nil
+			}
+		}
+	}
+}
+
+func calculateTrafficDensity(graph *Graph, timeStep int) map[string]interface{} {
+	densities := make(map[string]interface{})
+	densities["time_step"] = timeStep
+
+	for _, link := range graph.Links {
+		numVehicles := len(link.VehiclesOnRoad)
+		density := float64(numVehicles) / float64(ROAD_CAPACITY)
+		accidentStatus := link.Accident != nil
+
+		densities[link.ID] = map[string]interface{}{
+			"name":     link.FromNodeName + " to " + link.ToNodeName,
+			"density":  density,
+			"accident": accidentStatus,
+		}
+	}
+
+	return densities
 }
