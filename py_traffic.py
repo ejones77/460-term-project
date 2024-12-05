@@ -1,16 +1,24 @@
 import random
-import simpy
 import pygame
 import pandas as pd
 import numpy as np
 from collections import deque
+import time
+import tracemalloc
+import os
 
 """
 Baseline Initializations
 """
 
 NUM_VEHICLES = 1000
-ACCIDENT_PROBABILITY = 0.0001
+ACCIDENT_PROBABILITY = 0.001
+ROAD_CAPACITY = 10
+INTERSECTION_CAPACITY = 5
+GREEN_DURATION = 60
+YELLOW_DURATION = 30
+RED_DURATION = 60
+
 
 class TrafficSignal:
     def __init__(self, state, duration):
@@ -25,16 +33,18 @@ class Intersection:
         self.x = x
         self.y = y
         self.signal = signal
-        self.capacity = 5
+        self.capacity = INTERSECTION_CAPACITY
         self.queue = []
 
 class Road:
-    def __init__(self, id, from_node, to_node):
+    def __init__(self, id, name, from_node, to_node, capacity):
         self.id = id
+        self.name = name
         self.from_node = from_node
         self.to_node = to_node
         self.accident = None
         self.vehicles_on_road = []
+        self.capacity = ROAD_CAPACITY
 
 class Vehicle:
     def __init__(self, id, path, graph):
@@ -93,17 +103,18 @@ def read_nodes(filename):
         nodes[node_id] = Intersection(node_id, name, x, y)
     return nodes
 
-def read_edges(filename, nodes):
+def read_links(filename, nodes):
     links_df = pd.read_csv(filename)
     links = []
     for _, row in links_df.iterrows():
         from_node = nodes.get(row['From_Node_ID'])
         to_node = nodes.get(row['To_Node_ID'])
-        links.append(Road(row['Link_ID'], from_node, to_node))
+        name = f"{row['From_Node_Name']} to {row['To_Node_Name']}"
+        links.append(Road(row['Link_ID'], name, from_node, to_node, ROAD_CAPACITY))
     return links
 
 """
-Graph navigation
+Graph utils
 """
 
 def find_path(graph, start_id, end_id):
@@ -169,6 +180,19 @@ def check_for_accidents(graph, vehicles):
                     accident_duration = random.randint(300, 600)
                     link.accident = Accident(link, accident_position, accident_duration)
 
+def calculate_traffic_density(graph, time_step):
+    densities = {"time_step": time_step}
+    for link in graph.links:
+        num_vehicles = len(link.vehicles_on_road)
+        density = num_vehicles / link.capacity
+        accident_status = link.accident is not None
+        densities[link.id] = {
+            "name": link.name,
+            "density": density,
+            "accident": accident_status
+        }
+    return densities
+
 """
 Graph updates
 """
@@ -181,13 +205,13 @@ def update_traffic_signals(graph):
             if node.signal.elapsed_time >= node.signal.duration:
                 if node.signal.state == 'red':
                     node.signal.state = 'green'
-                    node.signal.duration = 60
+                    node.signal.duration = GREEN_DURATION
                 elif node.signal.state == 'green':
                     node.signal.state = 'yellow'
-                    node.signal.duration = 30
+                    node.signal.duration = YELLOW_DURATION
                 elif node.signal.state == 'yellow':
                     node.signal.state = 'red'
-                    node.signal.duration = 60
+                    node.signal.duration = RED_DURATION
                 node.signal.elapsed_time = 0
 
 def update_vehicles(vehicles):
@@ -267,9 +291,9 @@ def draw(screen, graph, vehicles):
             x, y = x * 80 + 50, y * 80 + 50
             
             # Change vehicle color based on status
-            vehicle_color = (0, 0, 255)  # Default blue for moving vehicles
+            vehicle_color = (0, 0, 255)
             if vehicle.status == 'waiting':
-                vehicle_color = (255, 165, 0)  # Orange for waiting vehicles
+                vehicle_color = (255, 165, 0)
             
             pygame.draw.rect(screen, vehicle_color, (x-5, y-5, 10, 10))
 
@@ -285,23 +309,22 @@ def draw(screen, graph, vehicles):
             pygame.draw.circle(screen, (255, 0, 0), (int(accident_x), int(accident_y)), 12)
             pygame.draw.circle(screen, (255, 255, 0), (int(accident_x), int(accident_y)), 8)
 
-def main():
+def main(num_vehicles, accident_probability):
     pygame.init()
     screen = pygame.display.set_mode((800, 800))
     clock = pygame.time.Clock()
 
     nodes = read_nodes("go_traffic/nodes.csv")
-    links = read_edges("go_traffic/links.csv", nodes)
+    links = read_links("go_traffic/links.csv", nodes)
     graph = Graph(nodes, links)
 
-    # ranomize traffic signals
+    # Randomize traffic signals
     for node in graph.nodes.values():
         initial_state = random.choice(['red', 'green', 'yellow'])
         initial_duration = random.randint(10, 30)
         node.signal = TrafficSignal(initial_state, initial_duration)
 
-    # create vehicles
-    num_vehicles = NUM_VEHICLES
+    # Create vehicles
     vehicles = []
     for i in range(num_vehicles):
         start_node_id = random.choice(list(graph.nodes.keys()))
@@ -315,6 +338,9 @@ def main():
         except ValueError as e:
             print(e)
 
+    traffic_density_data = []
+    time_step = 0
+
     running = True
     while running:
         for event in pygame.event.get():
@@ -327,10 +353,66 @@ def main():
         update_vehicles(vehicles)
         draw(screen, graph, vehicles)
 
+        current_density = calculate_traffic_density(graph, time_step)
+        traffic_density_data.append(current_density)
+
+        all_arrived = all(vehicle.status == 'arrived' for vehicle in vehicles)
+
+        if all_arrived:
+            running = False
+
         pygame.display.flip()
         clock.tick(60)
+        time_step += 1
 
     pygame.quit()
 
+    data = {
+        'num_vehicles': num_vehicles,
+        'accident_probability': accident_probability,
+        'traffic_density_data': traffic_density_data
+    }
+
+    
+    with open(f'py_traffic_density_data_{num_vehicles}_{accident_probability}.json', 'w') as f:
+        import json
+        json.dump(data, f, indent=4)
+    
+    print('done writing json data')
+
 if __name__ == "__main__":
-    main()
+    tracemalloc.start()
+
+    # Measure execution time & memory use
+    start_time = time.time()
+    main(NUM_VEHICLES, ACCIDENT_PROBABILITY)
+    end_time = time.time()
+    execution_time = end_time - start_time
+
+    current, peak = tracemalloc.get_traced_memory()
+    tracemalloc.stop()
+
+    data = {
+        'Language': ['Python'],
+        'NUM_VEHICLES': [NUM_VEHICLES],
+        'ACCIDENT_PROBABILITY': [ACCIDENT_PROBABILITY],
+        'ROAD_CAPACITY': [ROAD_CAPACITY],
+        'INTERSECTION_CAPACITY': [INTERSECTION_CAPACITY],
+        'GREEN_DURATION': [GREEN_DURATION],
+        'YELLOW_DURATION': [YELLOW_DURATION],
+        'RED_DURATION': [RED_DURATION],
+        'Execution Time (s)': [execution_time],
+        'Current Memory (MB)': [current / 10**6],
+        'Peak Memory (MB)': [peak / 10**6]
+    }
+
+    df_new = pd.DataFrame(data)
+
+    csv_file = 'python_simulation_stats.csv'
+    if os.path.exists(csv_file):
+        df_old = pd.read_csv(csv_file)
+        df_combined = pd.concat([df_old, df_new], ignore_index=True)
+    else:
+        df_combined = df_new
+
+    df_combined.to_csv(csv_file, index=False)

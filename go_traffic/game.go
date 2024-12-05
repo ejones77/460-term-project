@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"image/color"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -8,12 +9,18 @@ import (
 )
 
 type Game struct {
-	Graph    *Graph
-	Vehicles []*Vehicle
-	Step     int
+	Graph          *Graph
+	Vehicles       []*Vehicle
+	Step           int
+	Running        bool
+	TrafficDensity []map[string]interface{}
 }
 
 func (g *Game) Update() error {
+	if !g.Running {
+		return nil // Stop updating if the game is not running
+	}
+
 	// Update traffic signals
 	for _, node := range g.Graph.Nodes {
 		if node.Signal != nil {
@@ -22,13 +29,13 @@ func (g *Game) Update() error {
 				switch node.Signal.State {
 				case "red":
 					node.Signal.State = "green"
-					node.Signal.Duration = 60
+					node.Signal.Duration = GREEN_DURATION
 				case "green":
 					node.Signal.State = "yellow"
-					node.Signal.Duration = 30
+					node.Signal.Duration = YELLOW_DURATION
 				case "yellow":
 					node.Signal.State = "red"
-					node.Signal.Duration = 60
+					node.Signal.Duration = RED_DURATION
 				}
 				node.Signal.ElapsedTime = 0
 			}
@@ -36,8 +43,10 @@ func (g *Game) Update() error {
 	}
 
 	// Update vehicles
+	allArrived := true
 	for _, vehicle := range g.Vehicles {
 		if vehicle.Status != "arrived" {
+			allArrived = false
 			currentNode := vehicle.Path[vehicle.Position]
 			if vehicle.Position < len(vehicle.Path)-1 {
 				nextNode := vehicle.Path[vehicle.Position+1]
@@ -80,11 +89,16 @@ func (g *Game) Update() error {
 			}
 		}
 	}
+
+	if allArrived {
+		fmt.Println("All vehicles have arrived. Ending simulation.")
+		g.Running = false // Set the flag to stop the game loop
+	}
+
 	g.Step++
 
 	checkForAccidents(g.Graph, g.Vehicles)
 	updateAccidents(g.Graph)
-
 	return nil
 }
 

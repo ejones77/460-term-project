@@ -82,7 +82,7 @@ func readNodes(filename string) (map[string]*Intersection, error) {
 	return nodes, nil
 }
 
-func readEdges(filename string) ([]*Road, error) {
+func readLinks(filename string) ([]*Road, error) {
 	file, err := os.Open(filename)
 	if err != nil {
 		return nil, err
@@ -96,23 +96,24 @@ func readEdges(filename string) ([]*Road, error) {
 		return nil, err
 	}
 
-	var edges []*Road
+	var links []*Road
 
 	records, err := reader.ReadAll()
 	if err != nil {
 		return nil, err
 	}
 	for _, record := range records {
-		edge := &Road{
-			ID:           record[0],
-			FromNodeName: record[1],
-			ToNodeName:   record[2],
-			FromNodeID:   record[3],
-			ToNodeID:     record[4],
+		link := &Road{
+			ID:             record[0],
+			FromNodeName:   record[1],
+			ToNodeName:     record[2],
+			FromNodeID:     record[3],
+			ToNodeID:       record[4],
+			VehiclesOnRoad: []*Vehicle{},
 		}
-		edges = append(edges, edge)
+		links = append(links, link)
 	}
-	return edges, nil
+	return links, nil
 }
 
 func randomNodeID(nodes map[string]*Intersection) string {
@@ -164,4 +165,23 @@ func updateAccidents(graph *Graph) {
 			}
 		}
 	}
+}
+
+func calculateTrafficDensity(graph *Graph, timeStep int) map[string]interface{} {
+	densities := make(map[string]interface{})
+	densities["time_step"] = timeStep
+
+	for _, link := range graph.Links {
+		numVehicles := len(link.VehiclesOnRoad)
+		density := float64(numVehicles) / float64(ROAD_CAPACITY)
+		accidentStatus := link.Accident != nil
+
+		densities[link.ID] = map[string]interface{}{
+			"name":     link.FromNodeName + " to " + link.ToNodeName,
+			"density":  density,
+			"accident": accidentStatus,
+		}
+	}
+
+	return densities
 }
