@@ -122,3 +122,46 @@ func randomNodeID(nodes map[string]*Intersection) string {
 	}
 	return keys[rand.Intn(len(keys))]
 }
+
+func checkForAccidents(graph *Graph, vehicles []*Vehicle) {
+	for _, link := range graph.Links {
+		link.VehiclesOnRoad = nil
+	}
+
+	for _, vehicle := range vehicles {
+		if vehicle.Status != "arrived" && vehicle.Position < len(vehicle.Path)-1 {
+			currentNode := vehicle.Path[vehicle.Position]
+			nextNode := vehicle.Path[vehicle.Position+1]
+
+			for _, link := range graph.Links {
+				if link.FromNode == currentNode && link.ToNode == nextNode {
+					link.VehiclesOnRoad = append(link.VehiclesOnRoad, vehicle)
+					break
+				}
+			}
+		}
+	}
+
+	for _, link := range graph.Links {
+		if link.Accident == nil {
+			if len(link.VehiclesOnRoad) >= 2 {
+				if rand.Float64() < ACCIDENT_PROBABILITY {
+					accidentPosition := rand.Float64()
+					accidentDuration := rand.Intn(300) + 300
+					link.Accident = &Accident{Road: link, Position: accidentPosition, Duration: accidentDuration}
+				}
+			}
+		}
+	}
+}
+
+func updateAccidents(graph *Graph) {
+	for _, link := range graph.Links {
+		if link.Accident != nil {
+			link.Accident.ElapsedTime++
+			if link.Accident.ElapsedTime >= link.Accident.Duration {
+				link.Accident = nil
+			}
+		}
+	}
+}

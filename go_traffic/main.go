@@ -8,6 +8,9 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
+const ACCIDENT_PROBABILITY = 0.0001
+const NUM_VEHICLES = 1000
+
 func main() {
 	rand.New(rand.NewSource(0))
 
@@ -54,11 +57,9 @@ func main() {
 		link.ToNode = toNode
 	}
 
-	// Create multiple vehicles
-	numVehicles := 1000
 	vehicles := []*Vehicle{}
 
-	for i := 0; i < numVehicles; i++ {
+	for i := 0; i < NUM_VEHICLES; i++ {
 		startNodeID := randomNodeID(graph.Nodes)
 		endNodeID := randomNodeID(graph.Nodes)
 

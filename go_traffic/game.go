@@ -39,9 +39,35 @@ func (g *Game) Update() error {
 	for _, vehicle := range g.Vehicles {
 		if vehicle.Status != "arrived" {
 			currentNode := vehicle.Path[vehicle.Position]
+			if vehicle.Position < len(vehicle.Path)-1 {
+				nextNode := vehicle.Path[vehicle.Position+1]
+
+				// Check for accidents
+				var currentRoad *Road
+				for _, link := range g.Graph.Links {
+					if link.FromNode == currentNode && link.ToNode == nextNode {
+						currentRoad = link
+						break
+					}
+				}
+
+				if currentRoad != nil && currentRoad.Accident != nil {
+					if vehicle.Progress < currentRoad.Accident.Position {
+						vehicle.Progress += 0.01
+						vehicle.Status = "moving"
+						if vehicle.Progress >= currentRoad.Accident.Position {
+							vehicle.Status = "waiting"
+						}
+					} else {
+						vehicle.Status = "waiting"
+					}
+					continue
+				}
+			}
 
 			if currentNode.Signal == nil || currentNode.Signal.State == "green" {
 				vehicle.Progress += 0.01
+				vehicle.Status = "moving"
 				if vehicle.Progress >= 1.0 {
 					vehicle.Progress = 0.0
 					vehicle.Position++
@@ -55,6 +81,10 @@ func (g *Game) Update() error {
 		}
 	}
 	g.Step++
+
+	checkForAccidents(g.Graph, g.Vehicles)
+	updateAccidents(g.Graph)
+
 	return nil
 }
 
@@ -114,7 +144,28 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			x = x*scale + offsetX
 			y = y*scale + offsetY
 
-			vector.DrawFilledRect(screen, float32(x-5), float32(y-5), 10, 10, color.RGBA{0, 0, 255, 255}, false) // Larger blue squares for vehicles
+			// blue when moving, orange when waiting
+			vehicleColor := color.RGBA{0, 0, 255, 255}
+			if vehicle.Status == "waiting" {
+				vehicleColor = color.RGBA{255, 165, 0, 255}
+			}
+
+			vector.DrawFilledRect(screen, float32(x-5), float32(y-5), 10, 10, vehicleColor, false) // Larger squares for vehicles
+		}
+	}
+	// accidents
+	for _, link := range g.Graph.Links {
+		if link.Accident != nil {
+			x1 := float64(link.FromNode.X)*scale + offsetX
+			y1 := float64(link.FromNode.Y)*scale + offsetY
+			x2 := float64(link.ToNode.X)*scale + offsetX
+			y2 := float64(link.ToNode.Y)*scale + offsetY
+
+			accidentX := x1 + (x2-x1)*link.Accident.Position
+			accidentY := y1 + (y2-y1)*link.Accident.Position
+
+			vector.DrawFilledCircle(screen, float32(accidentX), float32(accidentY), 12, color.RGBA{255, 0, 0, 255}, false)
+			vector.DrawFilledCircle(screen, float32(accidentX), float32(accidentY), 8, color.RGBA{255, 255, 0, 255}, false)
 		}
 	}
 }
