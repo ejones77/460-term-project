@@ -311,7 +311,7 @@ def draw(screen, graph, vehicles):
 
 def main(num_vehicles, accident_probability):
     pygame.init()
-    screen = pygame.display.set_mode((800, 800))
+    screen = pygame.display.set_mode((1200, 1200))
     clock = pygame.time.Clock()
 
     nodes = read_nodes("go_traffic/nodes.csv")
